@@ -6,6 +6,7 @@ from flask_login import LoginManager, UserMixin, \
 
 app = Flask(__name__, static_url_path='/static')
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///database.db'
+app.config['SECRET_KEY']='MyKeyIsTheDankest'
 db = SQLAlchemy(app)
 
 
@@ -25,11 +26,14 @@ class DankRecipe(db.Model):
     preperation = db.Column(db.String(10000))
     cooking     = db.Column(db.String(1000))
 
-
-
-
-
+class User(UserMixin, db.Model):
+    id       = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), unique=True, nullable=False)
+    password = db.Column(db.String(40), nullable=False)
+    name     = db.Column(db.String(40), nullable=False)
 
 
 if __name__=="__main__":
+    login_manager = LoginManager(app)
+    login_manager.init_app(app)
     app.run()

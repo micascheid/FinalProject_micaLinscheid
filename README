@@ -1,0 +1,10 @@
+Welcome to my simple web dev recipe app:
+Unfortunatly there is a long ways to go....
+
+
+Task:
+-Finish setting up database and table relationships
+-Figure out base.html templates
+-What are all the html pages involved?
+	Home, Featured Recipe, My Profile
+-Get a basic style done that is good enough to move forward with backend shiz

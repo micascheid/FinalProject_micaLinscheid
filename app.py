@@ -1,5 +1,5 @@
 # Imports Obviously
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, \
     login_user, logout_user, current_user, login_required
@@ -25,13 +25,13 @@ def home():
 
 
 # Table/Models
-class HealthyRecipe(db.Model):
+class HlthyRec(db.Model):
     id =            db.Column(db.Integer, primary_key=True)
     ingredients =   db.Column(db.String(1000))
     preperation =   db.Column(db.String(10000))
     cooking     =   db.Column(db.String(10000))
 
-class DankRecipe(db.Model):
+class DankRec(db.Model):
     id =            db.Column(db.Integer, primary_key=True)
     ingredients = db.Column(db.String(1000))
     preperation = db.Column(db.String(10000))

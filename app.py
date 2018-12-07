@@ -30,18 +30,22 @@ class HlthyRec(db.Model):
     ingredients =   db.Column(db.String(1000))
     preperation =   db.Column(db.String(10000))
     cooking     =   db.Column(db.String(10000))
+    userId      =   db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class DankRec(db.Model):
     id =            db.Column(db.Integer, primary_key=True)
     ingredients = db.Column(db.String(1000))
     preperation = db.Column(db.String(10000))
     cooking     = db.Column(db.String(1000))
+    userId      = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class User(UserMixin, db.Model):
     id       = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(40), nullable=False)
     name     = db.Column(db.String(40), nullable=False)
+    hlthyrec = db.relationship('HlthyRec', backref='user')
+    dankrec  = db.relationship('DankRec', backref='user')
 
 
 @login_manager.user_loader

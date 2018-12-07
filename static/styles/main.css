@@ -1,0 +1,19 @@
+body {
+    background-color: beige;
+}
+
+nav {
+    width: 80%;
+    text-align: center;
+    background-color: lightblue;
+}
+
+nav ul li {
+    list-style: none;
+    display: inline-block;
+}
+
+nav ul li a:hover {
+    display: block;
+    background-color: darkcyan;
+}

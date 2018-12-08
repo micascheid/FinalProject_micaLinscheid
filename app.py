@@ -78,7 +78,7 @@ def usershit():
             dankrec.userId=current_user.id
 
             db.session.add(dankrec)
-            db.session.commite()
+            db.session.commit()
 
     return render_template('/profile.html')
 

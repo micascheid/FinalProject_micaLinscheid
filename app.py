@@ -22,6 +22,31 @@ login_manager.init_app(app)
 def home():
     return render_template('home.html')
 
+@app.route('/login', methods=['POST','GET'])
+def login():
+    if request.method=='POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        logout_user(user)
+    return render_template('login.html')
+
+@app.route('/signup', methods=['POST', 'GET'])
+def signup():
+    if request.method=='POST':
+        username = request.form['usernameS']
+        password = request.form['passwordS']
+        name = request.form['nameS']
+
+        # User object
+        user = User(username=username, password=password, name=name)
+
+        # Commit new user
+        db.session.add(user)
+        db.session.commit()
+
+    return redirect('/')
+
 
 
 # Table/Models

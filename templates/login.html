@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <!--Inheritance-->
+    {% extends "base.html" %}
+
+    <!--Title-->
+    {% block title %}Login{% endblock %}
+
+    <!--Login Content-->
+    {% block content %}
+        <h1>Already have an account? Login!</h1>
+        <form action="/login" method="POST">
+              Username:<input type="text" name="username"><br>
+                Password:<input type="text" name="password"><br>
+                <input type="submit" value="Login">
+        </form>
+
+        <h1>Sign up here!</h1>
+        <form action="/signup" method="POST">
+            Username:<input type="text" name="usernameS"><br>
+            Password:<input type="text" name="passwordS"><br>
+            Name:<input type="text" name="nameS"><br>
+            <input type="submit" value="Sign Up!">
+
+        </form>
+
+    {% endblock %}
+
+
+</body>
+</html>

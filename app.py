@@ -54,6 +54,12 @@ def signup():
 @app.route('/profile', methods=['POST', 'GET'])
 @login_required
 def usershit():
+    id = current_user.id
+    hlthyRecs = HlthyRec.query.filter_by(userId=id)
+    dankRecs = DankRec.query.filter_by(userId=id)
+    username = current_user.username
+
+
     if request.method=='POST':
         if request.form['recType']=='Healthy Recipe':
             name = request.form['recname']
@@ -63,6 +69,7 @@ def usershit():
 
             # Create hlthyrec object
             hlthyrec = HlthyRec(name=name, ingredients=ingredients, preperation=preperation, cooking=cooking)
+
             # Set owner of this recipe
             hlthyrec.userId = current_user.id
             db.session.add(hlthyrec)
@@ -74,13 +81,18 @@ def usershit():
             preperation = request.form['preperation']
             cooking = request.form['cooking']
 
-            dankrec = DankRec(name=name, ingredients=ingredients, preperation=preperation, cooking=cooking)
-            dankrec.userId=current_user.id
+            # Create dankrec object
+            dankrec = DankRec(name=name, ingredients=ingredients, preperation=preperation,
+                              cooking=cooking)
 
+            # Set owner of this recipe
+            dankrec.userId = current_user.id
             db.session.add(dankrec)
             db.session.commit()
 
-    return render_template('/profile.html')
+
+    return render_template('/profile.html', hlthyRecs=hlthyRecs, dankRecs=dankRecs,
+                           username=username)
 
     # TODO else if recType isn't entered
 

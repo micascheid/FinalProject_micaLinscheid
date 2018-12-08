@@ -28,8 +28,8 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        logout_user(user)
-    return render_template('login.html')
+        login_user(user)
+    return redirect('/profile')
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
@@ -46,6 +46,9 @@ def signup():
         db.session.commit()
 
     return redirect('/')
+
+@app.route('/profile', methods=['POST', 'GET'])
+def usershit
 
 
 

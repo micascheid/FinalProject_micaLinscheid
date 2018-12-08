@@ -2,21 +2,30 @@ body {
     background-color: beige;
 }
 
-nav {
-    width: 80%;
-    margin-left: 10%;
-    margin-right:10%;
-    text-align: center;
+nav ul {
+    list-style: none;
+    width: 20%;
     background-color: lightblue;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    position: fixed;
+    overflow: auto;
 }
 
-nav ul li {
-    text-align: center;
-    list-style: none;
-    display: inline-block;
+nav ul li a {
+    display: block;
+    color: #000;
+    text-decoration: none;
+    padding:8px 16px;
 }
 
 nav ul li a:hover {
-    display: block;
     background-color: darkcyan;
 }
+
+nav ul li a.active {
+    background-color: aquamarine;
+}
+
+

@@ -13,6 +13,7 @@
 
     <!--User Content-->
     {% block content %}
+    <div style="margin-left: 25%">
         <h1>Welcome {{username}}</h1>
         <h1>Make a recipe!</h1>
         <form action="/profile" method="POST">
@@ -56,6 +57,6 @@
             {% endfor %}
         {% endif %}
     {% endblock %}
-
+    </div>
 </body>
 </html>

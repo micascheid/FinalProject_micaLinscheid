@@ -28,8 +28,12 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        login_user(user)
-    return redirect('/profile')
+        if user.username == username and user.password==password:
+            login_user(user)
+            return redirect('/profile')
+        else:
+            print("So you can't remember your credential? That sucks! HAHA")
+    return render_template('/login.html')
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
@@ -48,20 +52,51 @@ def signup():
     return redirect('/')
 
 @app.route('/profile', methods=['POST', 'GET'])
-def usershit
+@login_required
+def usershit():
+    if request.method=='POST':
+        if request.form['recType']=='Healthy Recipe':
+            name = request.form['recname']
+            ingredients = request.form['ingredients']
+            preperation = request.form['preperation']
+            cooking = request.form['cooking']
 
+            # Create hlthyrec object
+            hlthyrec = HlthyRec(name=name, ingredients=ingredients, preperation=preperation, cooking=cooking)
+            # Set owner of this recipe
+            hlthyrec.userId = current_user.id
+            db.session.add(hlthyrec)
+            db.session.commit()
+
+        if request.form['recType']=='That Dank Dank':
+            name = request.form['recname']
+            ingredients = request.form['ingredients']
+            preperation = request.form['preperation']
+            cooking = request.form['cooking']
+
+            dankrec = DankRec(name=name, ingredients=ingredients, preperation=preperation, cooking=cooking)
+            dankrec.userId=current_user.id
+
+            db.session.add(dankrec)
+            db.session.commite()
+
+    return render_template('/profile.html')
+
+    # TODO else if recType isn't entered
 
 
 # Table/Models
 class HlthyRec(db.Model):
     id =            db.Column(db.Integer, primary_key=True)
+    name        =   db.Column(db.String(100))
     ingredients =   db.Column(db.String(1000))
     preperation =   db.Column(db.String(10000))
     cooking     =   db.Column(db.String(10000))
     userId      =   db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class DankRec(db.Model):
-    id =            db.Column(db.Integer, primary_key=True)
+    id          = db.Column(db.Integer, primary_key=True)
+    name        = db.Column(db.String(100))
     ingredients = db.Column(db.String(1000))
     preperation = db.Column(db.String(10000))
     cooking     = db.Column(db.String(1000))

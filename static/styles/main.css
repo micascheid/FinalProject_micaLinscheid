@@ -4,11 +4,14 @@ body {
 
 nav {
     width: 80%;
+    margin-left: 10%;
+    margin-right:10%;
     text-align: center;
     background-color: lightblue;
 }
 
 nav ul li {
+    text-align: center;
     list-style: none;
     display: inline-block;
 }

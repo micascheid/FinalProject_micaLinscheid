@@ -14,17 +14,20 @@
     <!--Login Content-->
     {% block content %}
     <div style="margin-left: 25%">
-        <h1>Already have an account? Login!</h1>
+        <h1 class="welcome">Already have an account? Login!</h1>
+        {% if sorry %}
+            <p style="color: red;">Sorry please try again</p>
+        {% endif %}
         <form action="/login" method="POST">
               Username:<input type="text" name="username"><br>
-                Password:<input type="text" name="password"><br>
+                Password:<input type="password" name="password"><br>
                 <input type="submit" value="Login">
         </form>
 
         <h1>Sign up here!</h1>
         <form action="/signup" method="POST">
             Username:<input type="text" name="usernameS"><br>
-            Password:<input type="text" name="passwordS"><br>
+            Password:<input type="password" name="passwordS"><br>
             Name:<input type="text" name="nameS"><br>
             <input type="submit" value="Sign Up!">
 

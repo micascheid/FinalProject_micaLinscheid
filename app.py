@@ -5,7 +5,6 @@ from flask_login import LoginManager, UserMixin, \
     login_user, logout_user, current_user, login_required
 
 
-
 # Basic Setup shiz
 app = Flask(__name__, static_url_path='/static')
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///database.db'
@@ -24,16 +23,20 @@ def home():
 
 @app.route('/login', methods=['POST','GET'])
 def login():
+    sorry = False
     if request.method=='POST':
+        print("THIS IS A POST FROM LOGIN")
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        if user.username == username and user.password==password:
+        print("user:", user)
+        if user == None:
+            sorry = True
+            return render_template('login.html', sorry=sorry)
+        elif user.username == username  and user.password == password:
             login_user(user)
             return redirect('/profile')
-        else:
-            print("So you can't remember your credential? That sucks! HAHA")
-    return render_template('/login.html')
+    return render_template('login.html')
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
@@ -58,7 +61,6 @@ def usershit():
     hlthyRecs = HlthyRec.query.filter_by(userId=id)
     dankRecs = DankRec.query.filter_by(userId=id)
     username = current_user.username
-
 
     if request.method=='POST':
         if request.form['recType']=='Healthy Recipe':
@@ -91,10 +93,26 @@ def usershit():
             db.session.commit()
 
 
-    return render_template('/profile.html', hlthyRecs=hlthyRecs, dankRecs=dankRecs,
+    return render_template('profile.html', hlthyRecs=hlthyRecs, dankRecs=dankRecs,
                            username=username)
 
     # TODO else if recType isn't entered
+
+@app.route('/staffavs', methods=['POST','GET'])
+def staffavs():
+    return render_template('staffavs.html')
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/login')
+
+
+@app.errorhandler(404)
+def err(err):
+    return render_template('404.html', err=err)
 
 
 # Table/Models

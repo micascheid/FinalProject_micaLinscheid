@@ -13,50 +13,59 @@
 
     <!--User Content-->
     {% block content %}
-    <div style="margin-left: 25%">
+    <script>
+        login = document.getElementById("login");
+        login.innerHTML = '<li id=' + 'login' + '><a href="/logout">Logout</a></li>';
+
+    </script>
+    <div class="main">
         <h1>Welcome {{username}}</h1>
-        <h1>Make a recipe!</h1>
-        <form action="/profile" method="POST">
-            <select name="recType">
-                <option name="hlthyRec">Healthy Recipe</option>
-                <option name="dankRec">That Dank Dank</option>
-            </select><br>
-            Name:<input type="text" name="recname"><br>
-            Ingredients:<input type="text" name="ingredients"><br>
-            Preperation:<textarea name="preperation" rows="15" cols="20"></textarea><br>
-            Cooking Instructions: <textarea name="cooking" rows="15" cols="20"></textarea><br>
-            <input type="submit" value="Add Recipe!">
+        <div id="myrecipes">
+            <h1>Healthy Recipes</h1>
+            {% if hlthyRecs %}
+                {% for item in hlthyRecs %}
+                    <h3>{{item.name}}<a href="/editrec">edit</a> </h3>
+                    <ul>
+                        <li>{{item.ingredients}}</li>
+                        <li>{{item.preperation}}</li>
+                        <li>{{item.cooking}}</li>
+                    </ul>
+                {% endfor %}
+            {% endif %}
 
-        </form>
+            <h1>Dank Recipes</h1>
+            {% if dankRecs %}
+                {% for dankRec in dankRecs %}
+                    <h3>Dank Recipe</h3>
+                    <ul>
+                        <li>{{dankRec.name}}</li>
+                        <li>{{dankRec.ingredients}}</li>
+                        <li>{{dankRec.preperation}}</li>
+                        <li>{{dankRec.cooking}}</li>
+                    </ul>
 
+                {% endfor %}
+            {% endif %}
+        </div>
 
-        <h1>Healthy Recipes</h1>
-        {% if hlthyRecs %}
-            {% for item in hlthyRecs %}
-                <h3>Healthy Recipe</h3>
-                <ul>
-                    <li>{{item.name}}</li>
-                    <li>{{item.ingredients}}</li>
-                    <li>{{item.preperation}}</li>
-                    <li>{{item.cooking}}</li>
-                </ul>
-            {% endfor %}
-        {% endif %}
+        <div id="addrecipes">
+            <h1>Make a recipe!</h1>
+            <form action="/profile" method="POST">
+                <select name="recType">
+                    <option name="hlthyRec">Healthy Recipe</option>
+                    <option name="dankRec">That Dank Dank</option>
+                </select><br>
+                Name:<input type="text" name="recname"><br>
+                Ingredients:<input type="text" name="ingredients"><br>
+                <label for="preperation">Preperation:</label><br>
+                <textarea name="preperation" id="preperation" rows="15" cols="75"></textarea><br>
+                <label for="instructions">Instructions:</label><br>
+                <textarea name="cooking" id="instructions" rows="15" cols="75"></textarea><br>
+                <input type="submit" value="Add Recipe!">
+            </form>
+        </div>
+        {% endblock %}
 
-        <h1>Dank Recipes</h1>
-        {% if dankRecs %}
-            {% for dankRec in dankRecs %}
-                <h3>Dank Recipe</h3>
-                <ul>
-                    <li>{{dankRec.name}}</li>
-                    <li>{{dankRec.ingredients}}</li>
-                    <li>{{dankRec.preperation}}</li>
-                    <li>{{dankRec.cooking}}</li>
-                </ul>
-
-            {% endfor %}
-        {% endif %}
-    {% endblock %}
     </div>
 </body>
 </html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <!--Inheritance-->
+    {% extends "base.html" %}
+
+    <!--Title-->
+    {% block title %}Categories{% endblock %}
+
+    <!--Unique Content-->
+    {% block content %}
+    <div id="myrecipes">
+            <h1>Healthy Recipes</h1>
+            {% if hlthyRecs %}
+                {% for item in hlthyRecs %}
+                    <h3>Healthy Recipe</h3>
+                    <ul>
+                        <li>{{item.name}}</li>
+                        <li>{{item.ingredients}}</li>
+                        <li>{{item.preperation}}</li>
+                        <li>{{item.cooking}}</li>
+                    </ul>
+                {% endfor %}
+            {% endif %}
+
+            <h1>Dank Recipes</h1>
+            {% if dankRecs %}
+                {% for dankRec in dankRecs %}
+                    <h3>Dank Recipe</h3>
+                    <ul>
+                        <li>{{dankRec.name}}</li>
+                        <li>{{dankRec.ingredients}}</li>
+                        <li>{{dankRec.preperation}}</li>
+                        <li>{{dankRec.cooking}}</li>
+                    </ul>
+
+                {% endfor %}
+            {% endif %}
+        </div>
+
+
+    {% endblock %}
+
+
+
+</body>
+</html>

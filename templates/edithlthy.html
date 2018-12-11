@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% extends "base.html" %}
+
+    {% block title%}Edit Recipe{% endblock %}
+
+    {% block content %}
+        <div class="main">
+            <form action="/edithlthy/{{recId}}" method="POST">
+                <select name="recType">
+                    <option name="hlthyRec" selected="selected">Healthy Recipe</option>
+                    <option name="dankRec">That Dank Dank</option>
+                </select><br>
+                Name:<input type="text" name="recname" value="{{name}}"><br>
+                Ingredients:<input type="text" name="ingredients" value="{{ingredients}}"><br>
+                <label for="preperation">Preperation:</label><br>
+                <textarea name="preperation" id="preperation" rows="15" cols="75">{{preperation}}</textarea><br>
+                <label for="cooking">Instructions:</label><br>
+                <textarea name="cooking" id="cooking" rows="15" cols="75">{{cooking}}</textarea><br>
+                <input type="submit" value="Edit">
+            </form>
+        </div>
+    {% endblock %}
+
+</body>
+</html>

@@ -1,11 +1,15 @@
 # Imports Obviously
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, g
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, \
     login_user, logout_user, current_user, login_required
+import flask_sijax
+import os
 
 
-# Basic Setup shiz
+
+
+# Basic Setup for SQLAlchemy
 app = Flask(__name__, static_url_path='/static')
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///database.db'
 app.config['SECRET_KEY']='MyKeyIsTheDankest'
@@ -14,6 +18,11 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.init_app(app)
 
+# Basic Setup for sijax
+path = os.path.join('.', os.path.dirname(__file__), 'static/js/sijax/')
+app.config['SIJAX_STATIC_PATH'] = path
+app.config['SIJAX_JSON_URI'] = '/static/js/sijax/json2.js'
+flask_sijax.Sijax(app)
 
 
 # Routes
@@ -25,11 +34,9 @@ def home():
 def login():
     sorry = False
     if request.method=='POST':
-        print("THIS IS A POST FROM LOGIN")
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        print("user:", user)
         if user == None:
             sorry = True
             return render_template('login.html', sorry=sorry)
@@ -56,7 +63,7 @@ def signup():
 
 @app.route('/profile', methods=['POST', 'GET'])
 @login_required
-def usershit():
+def usersdata():
     id = current_user.id
     hlthyRecs = HlthyRec.query.filter_by(userId=id)
     dankRecs = DankRec.query.filter_by(userId=id)
@@ -95,19 +102,144 @@ def usershit():
 
     return render_template('profile.html', hlthyRecs=hlthyRecs, dankRecs=dankRecs,
                            username=username)
-
-    # TODO else if recType isn't entered
-
 @app.route('/staffavs', methods=['POST','GET'])
 def staffavs():
     return render_template('staffavs.html')
-
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect('/login')
+
+
+@app.route('/edithlthy/<recId>', methods=['POST', 'GET'])
+def edithlthy(recId):
+    if request.method == 'POST':
+
+        recType = request.form['recType']
+
+        if recType == "Healthy Recipe":
+
+            rec = HlthyRec.query.get(recId)
+
+            name = request.form['recname']
+            ingredients = request.form['ingredients']
+            preperation = request.form['preperation']
+            cooking = request.form['cooking']
+
+            rec.name = name
+            rec.ingredients = ingredients
+            rec.preperation = preperation
+            rec.cooking = cooking
+
+            db.session.commit()
+
+            return redirect('/profile')
+
+        if recType == "That Dank Dank":
+            hlthyrec = HlthyRec.query.get(recId)
+            db.session.delete(hlthyrec)
+            db.session.commit()
+
+            name = request.form['recname']
+            ingredients = request.form['ingredients']
+            preperation = request.form['preperation']
+            cooking = request.form['cooking']
+
+            # Create dankrec object
+            dankrec = DankRec(name=name, ingredients=ingredients, preperation=preperation,
+                              cooking=cooking)
+
+            # Set owner of this recipe
+            dankrec.userId = current_user.id
+            db.session.add(dankrec)
+            db.session.commit()
+
+            return redirect('/profile')
+
+
+    else:
+        rec = HlthyRec.query.get(recId)
+
+        name =        rec.name
+        ingredients = rec.ingredients
+        preperation = rec.preperation
+        cooking =     rec.cooking
+        return render_template('edithlthy.html', name=name, ingredients=ingredients,
+                               preperation=preperation, cooking=cooking, recId=recId)
+
+
+@app.route('/editdank/<recId>', methods=['POST', 'GET'])
+def editdank(recId):
+    if request.method == 'POST':
+
+        recType = request.form['recType']
+
+        if recType == "That Dank Dank":
+            rec = DankRec.query.get(recId)
+
+            name = request.form['recname']
+            ingredients = request.form['ingredients']
+            preperation = request.form['preperation']
+            cooking = request.form['cooking']
+
+            rec.name = name
+            rec.ingredients = ingredients
+            rec.preperation = preperation
+            rec.cooking = cooking
+
+            db.session.commit()
+
+            return redirect('/profile')
+
+        if recType == "Healthy Recipe":
+
+            dankrec = DankRec.query.get(recId)
+            db.session.delete(dankrec)
+            db.session.commit()
+
+            name = request.form['recname']
+            ingredients = request.form['ingredients']
+            preperation = request.form['preperation']
+            cooking = request.form['cooking']
+
+            # Create HlthyRec object
+            hlthyRec = HlthyRec(name=name, ingredients=ingredients, preperation=preperation,
+                              cooking=cooking)
+
+            # Set owner of this recipe
+            HlthyRec.userId = current_user.id
+            db.session.add(hlthyRec)
+            db.session.commit()
+            return redirect('/profile')
+    else:
+        rec = DankRec.query.get(recId)
+
+        name =        rec.name
+        ingredients = rec.ingredients
+        preperation = rec.preperation
+        cooking =     rec.cooking
+        return render_template('editdank.html', name=name, ingredients=ingredients,
+                               preperation=preperation, cooking=cooking, recId=recId)
+
+
+
+@app.route('/hlthydelete/<recId>', methods=['GET'])
+def hlthydelete(recId):
+    rec = HlthyRec.query.get(recId)
+    db.session.delete(rec)
+    db.session.commit()
+
+    return redirect('/profile')
+
+@app.route('/dankdelete/<recId>', methods=['GET'])
+def dankdelete(recId):
+    rec = HlthyRec.query.get(recId)
+    db.session.delete(rec)
+    db.session.commit()
+
+    return redirect('/profile')
 
 
 @app.errorhandler(404)

@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
+    <script type="text/javascript" src="static/jquery/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/static/js/sijax/sijax.js"></script>
+    <script type="text/javascript">{{ g.sijax.get_js()|safe }}</script>
 </head>
 <body>
     <!--Inheritance-->
@@ -16,15 +19,15 @@
     <script>
         login = document.getElementById("login");
         login.innerHTML = '<li id=' + 'login' + '><a href="/logout">Logout</a></li>';
-
     </script>
+
     <div class="main">
         <h1>Welcome {{username}}</h1>
         <div id="myrecipes">
             <h1>Healthy Recipes</h1>
             {% if hlthyRecs %}
                 {% for item in hlthyRecs %}
-                    <h3>{{item.name}}<a href="/editrec">edit</a> </h3>
+                    <h3>{{item.name}} <a href="/edithlthy/{{item.id}}">Edit</a> <a href="/hlthydelete/{{item.id}}">Delete</a> </h3>
                     <ul>
                         <li>{{item.ingredients}}</li>
                         <li>{{item.preperation}}</li>
@@ -35,13 +38,12 @@
 
             <h1>Dank Recipes</h1>
             {% if dankRecs %}
-                {% for dankRec in dankRecs %}
-                    <h3>Dank Recipe</h3>
+                {% for item in dankRecs %}
+                    <h3>{{item.name}} <a href="/editdank/{{item.id}}">Edit</a> <a href="/dankdelete/{{item.id}}">Delete</a> </h3>
                     <ul>
-                        <li>{{dankRec.name}}</li>
-                        <li>{{dankRec.ingredients}}</li>
-                        <li>{{dankRec.preperation}}</li>
-                        <li>{{dankRec.cooking}}</li>
+                        <li>{{item.ingredients}}</li>
+                        <li>{{item.preperation}}</li>
+                        <li>{{item.cooking}}</li>
                     </ul>
 
                 {% endfor %}

@@ -4,9 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, \
     login_user, logout_user, current_user, login_required
 
-
-
-
 # Basic Setup for SQLAlchemy
 app = Flask(__name__, static_url_path='/static')
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///database.db'
@@ -70,7 +67,6 @@ def usersdata():
         if request.form['recType']=='That Dank Dank':
             recTypeCreate(DankRec)
 
-
     return render_template('profile.html', hlthyRecs=hlthyRecs, dankRecs=dankRecs,
                            username=username)
 
@@ -88,28 +84,13 @@ def edithlthy(recId):
 
         if recType == "Healthy Recipe":
 
-            recEdit(HlthyRec, recId)
+            return recEdit(HlthyRec, recId)
 
         if recType == "That Dank Dank":
-            hlthyrec = HlthyRec.query.get(recId)
-            db.session.delete(hlthyrec)
-            db.session.commit()
-
             recTypeCreate(DankRec)
-
-            return redirect('/profile')
-
-
+            return recDelete(HlthyRec, recId)
     else:
-        rec = HlthyRec.query.get(recId)
-
-        name =        rec.name
-        ingredients = rec.ingredients
-        preperation = rec.preperation
-        cooking =     rec.cooking
-        return render_template('edithlthy.html', name=name, ingredients=ingredients,
-                               preperation=preperation, cooking=cooking, recId=recId)
-
+        return renderRec(HlthyRec, recId, 'edithlthy.html')
 
 @app.route('/editdank/<recId>', methods=['POST', 'GET'])
 def editdank(recId):
@@ -118,26 +99,28 @@ def editdank(recId):
         recType = request.form['recType']
 
         if recType == "That Dank Dank":
-            recEdit(DankRec)
+            return recEdit(DankRec, recId)
 
         if recType == "Healthy Recipe":
-            dankrec = DankRec.query.get(recId)
-            db.session.delete(dankrec)
-            db.session.commit()
-
             recTypeCreate(HlthyRec)
-
-            return redirect('/profile')
+            return recDelete(DankRec, recId)
     else:
-        rec = DankRec.query.get(recId)
+        return renderRec(DankRec, recId, 'editdank.html')
 
-        name =        rec.name
-        ingredients = rec.ingredients
-        preperation = rec.preperation
-        cooking =     rec.cooking
-        return render_template('editdank.html', name=name, ingredients=ingredients,
-                               preperation=preperation, cooking=cooking, recId=recId)
+@app.route('/hlthydelete/<recId>', methods=['GET'])
+def hlthydelete(recId):
+    return recDelete(HlthyRec, recId)
 
+@app.route('/dankdelete/<recId>', methods=['GET'])
+def dankdelete(recId):
+    return recDelete(DankRec, recId)
+
+@app.errorhandler(404)
+def err(err):
+    return render_template('404.html', err=err)
+
+
+# functions
 def recTypeCreate(model):
     name = request.form['recname']
     ingredients = request.form['ingredients']
@@ -166,29 +149,23 @@ def recEdit(model, recId):
     rec.cooking = cooking
 
     db.session.commit()
-
     return redirect('/profile')
 
-@app.route('/hlthydelete/<recId>', methods=['GET'])
-def hlthydelete(recId):
-    rec = HlthyRec.query.get(recId)
+def recDelete(model, recId):
+    rec = model.query.get(recId)
     db.session.delete(rec)
     db.session.commit()
-
     return redirect('/profile')
 
-@app.route('/dankdelete/<recId>', methods=['GET'])
-def dankdelete(recId):
-    rec = DankRec.query.get(recId)
-    db.session.delete(rec)
-    db.session.commit()
+def renderRec(model, recId, html):
+    rec = model.query.get(recId)
 
-    return redirect('/profile')
-
-
-@app.errorhandler(404)
-def err(err):
-    return render_template('404.html', err=err)
+    name = rec.name
+    ingredients = rec.ingredients
+    preperation = rec.preperation
+    cooking = rec.cooking
+    return render_template(html, name=name, ingredients=ingredients,
+                           preperation=preperation, cooking=cooking, recId=recId)
 
 
 # Table/Models

@@ -94,9 +94,6 @@ def usersdata():
 
     return render_template('profile.html', hlthyRecs=hlthyRecs, dankRecs=dankRecs,
                            username=username)
-@app.route('/staffavs', methods=['POST','GET'])
-def staffavs():
-    return render_template('staffavs.html')
 
 @app.route('/logout')
 @login_required

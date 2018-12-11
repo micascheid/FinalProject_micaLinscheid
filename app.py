@@ -3,8 +3,6 @@ from flask import Flask, render_template, request, redirect, g
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, \
     login_user, logout_user, current_user, login_required
-import flask_sijax
-import os
 
 
 
@@ -17,12 +15,6 @@ db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
 login_manager.init_app(app)
-
-# Basic Setup for sijax
-path = os.path.join('.', os.path.dirname(__file__), 'static/js/sijax/')
-app.config['SIJAX_STATIC_PATH'] = path
-app.config['SIJAX_JSON_URI'] = '/static/js/sijax/json2.js'
-flask_sijax.Sijax(app)
 
 
 # Routes

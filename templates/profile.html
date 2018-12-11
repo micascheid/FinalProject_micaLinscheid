@@ -20,15 +20,16 @@
 
     <div class="main">
         <h1>Welcome {{username}}</h1>
-        <div id="myrecipes">
+        <div id="left">
             <h1>Healthy Recipes</h1>
             {% if hlthyRecs %}
                 {% for item in hlthyRecs %}
                     <h3>{{item.name}} <a href="/edithlthy/{{item.id}}">Edit</a> <a href="/hlthydelete/{{item.id}}">Delete</a> </h3>
                     <ul>
-                        <li>{{item.ingredients}}</li>
-                        <li>{{item.preperation}}</li>
-                        <li>{{item.cooking}}</li>
+                        <li class="ingredients">Ingredients: {{item.ingredients}}</li>
+                        <li class="preperation">Preperation: {{item.preperation}}</li>
+                        <li class="cooking">Cooking Instructions: {{item.cooking}}</li>
+                        <!--<li>Picture: {{item.image}}</li>-->
                     </ul>
                 {% endfor %}
             {% endif %}
@@ -38,16 +39,17 @@
                 {% for item in dankRecs %}
                     <h3>{{item.name}} <a href="/editdank/{{item.id}}">Edit</a> <a href="/dankdelete/{{item.id}}">Delete</a> </h3>
                     <ul>
-                        <li>{{item.ingredients}}</li>
-                        <li>{{item.preperation}}</li>
-                        <li>{{item.cooking}}</li>
+                        <li class="ingredients">Ingredients: {{item.ingredients}}</li>
+                        <li class="preperation">Preperation: {{item.preperation}}</li>
+                        <li class="cooking">Cooking Instructions: {{item.cooking}}</li>
+                        <li><img src="" id="imageupload"> </li>
                     </ul>
 
                 {% endfor %}
             {% endif %}
         </div>
 
-        <div id="addrecipes">
+        <div id="right">
             <h1>Make a recipe!</h1>
             <form action="/profile" method="POST">
                 <select name="recType">

@@ -20,11 +20,13 @@ login_manager.init_app(app)
 # Routes
 @app.route('/')
 def home():
-    return render_template('home.html')
+    hlthyRecs = HlthyRec.query.filter_by(userId=1)
+    dankRecs = DankRec.query.filter_by(userId=1)
+    return render_template('home.html', hlthyRecs=hlthyRecs, dankRecs=dankRecs,
+                           username="Staff")
 
 @app.route('/login', methods=['POST','GET'])
 def login():
-    sorry = False
     if request.method=='POST':
         username = request.form['username']
         password = request.form['password']
@@ -50,8 +52,8 @@ def signup():
         # Commit new user
         db.session.add(user)
         db.session.commit()
-
-    return redirect('/')
+        login_user(user)
+        return redirect('/profile')
 
 @app.route('/profile', methods=['POST', 'GET'])
 @login_required
@@ -166,24 +168,23 @@ def editdank(recId):
         recType = request.form['recType']
 
         if recType == "That Dank Dank":
-            rec = DankRec.query.get(recId)
+            # rec = DankRec.query.get(recId)
+            #
+            # name = request.form['recname']
+            # ingredients = request.form['ingredients']
+            # preperation = request.form['preperation']
+            # cooking = request.form['cooking']
+            #
+            # rec.name = name
+            # rec.ingredients = ingredients
+            # rec.preperation = preperation
+            # rec.cooking = cooking
+            #
+            # db.session.commit()
 
-            name = request.form['recname']
-            ingredients = request.form['ingredients']
-            preperation = request.form['preperation']
-            cooking = request.form['cooking']
-
-            rec.name = name
-            rec.ingredients = ingredients
-            rec.preperation = preperation
-            rec.cooking = cooking
-
-            db.session.commit()
-
-            return redirect('/profile')
+            return recTypeNormal(DankRec, recId)
 
         if recType == "Healthy Recipe":
-
             dankrec = DankRec.query.get(recId)
             db.session.delete(dankrec)
             db.session.commit()
@@ -198,9 +199,10 @@ def editdank(recId):
                               cooking=cooking)
 
             # Set owner of this recipe
-            HlthyRec.userId = current_user.id
+            hlthyRec.userId = current_user.id
             db.session.add(hlthyRec)
             db.session.commit()
+
             return redirect('/profile')
     else:
         rec = DankRec.query.get(recId)
@@ -211,6 +213,24 @@ def editdank(recId):
         cooking =     rec.cooking
         return render_template('editdank.html', name=name, ingredients=ingredients,
                                preperation=preperation, cooking=cooking, recId=recId)
+
+def recTypeNormal(model, recId):
+    rec = model.Query.get(recId)
+
+    name = request.form['recname']
+    ingredients = request.form['ingredients']
+    preperation = request.form['preperation']
+    cooking = request.form['cooking']
+
+    rec.name = name
+    rec.ingredients = ingredients
+    rec.preperation = preperation
+    rec.cooking = cooking
+
+    db.session.commit()
+
+    return redirect('/profile')
+
 
 
 
@@ -224,7 +244,7 @@ def hlthydelete(recId):
 
 @app.route('/dankdelete/<recId>', methods=['GET'])
 def dankdelete(recId):
-    rec = HlthyRec.query.get(recId)
+    rec = DankRec.query.get(recId)
     db.session.delete(rec)
     db.session.commit()
 

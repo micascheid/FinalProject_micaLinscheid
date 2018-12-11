@@ -14,11 +14,44 @@
 
     <!--Unique Content-->
     {% block content %}
+    <div class="main">
+        <h1>Welcome to  Recipe Cloud</h1>
+        <div id="left">
+            <h1>Staff Favorites...</h1>
+            <h2>Healthy Recipes</h2>
+            {% if hlthyRecs %}
+                {% for item in hlthyRecs %}
+                    <h3>{{item.name}} <a href="/edithlthy/{{item.id}}">Edit</a> <a href="/hlthydelete/{{item.id}}">Delete</a> </h3>
+                    <ul>
+                        <li class="ingredients">Ingredients: {{item.ingredients}}</li>
+                        <li class="preperation">Preperation: {{item.preperation}}</li>
+                        <li class="cooking">Cooking Instructions: {{item.cooking}}</li>
+                    </ul>
+                {% endfor %}
+            {% endif %}
 
-    <h1>Welcome to Recipe Cloud!</h1>
-    <h1>Enjoy some Recipes from our staff!</h1>
+            <h2>Dank Recipes</h2>
+            {% if dankRecs %}
+                {% for item in dankRecs %}
+                    <h3>{{item.name}} <a href="/editdank/{{item.id}}">Edit</a> <a href="/dankdelete/{{item.id}}">Delete</a> </h3>
+                    <ul>
+                        <li class="ingredients">Ingredients: {{item.ingredients}}</li>
+                        <li class="preperation">Preperation: {{item.preperation}}</li>
+                        <li class="cooking">Cooking Instructions: {{item.cooking}}</li>
+                        <li><img src="" id="imageupload"> </li>
+                    </ul>
 
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div id="right">
+            <p>This web app is a place for you to store all your
+            favorite recipes! Out for the holidays and you forgot
+            your cookbook? No problem just login from anywhere in the
+            world and checkout your recipes!</p>
+        </div>
 
+    </div>
     {% endblock %}
 </body>
 </html>

@@ -11,8 +11,16 @@ nav ul {
     position: fixed;
 }
 
-nav ul li {
+ul {
     list-style: none;
+}
+
+.active {
+    background-color: darkcyan;
+}
+
+nav ul li a:hover {
+    background-color: darkcyan;
 }
 
 nav ul li a {
@@ -26,25 +34,36 @@ nav ul li a:hover {
     background-color: darkcyan;
 }
 
-nav ul li a.active {
-    background-color: aquamarine;
-}
-
 div.main{
+    position: inherit;
     width: 84%;
     margin-left: 16%;
 }
 
-#myrecipes {
+#left {
     width: 50%;
-    word-break: break-all;
+    word-break: keep-all;
     float: left;
-
+    background-color: antiquewhite;
 }
 
-#addrecipes {
+#right {
     float: left;
     width: 50%;
+    background-color: azure;
+    height: 100%;
+    word-break: keep-all;
+}
 
+li.ingredients {
+    background-color: lightblue;
+}
+
+li.preperation {
+    background-color: aliceblue;
+}
+
+li.cooking {
+    background-color: cornflowerblue;
 }
 

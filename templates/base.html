@@ -6,12 +6,22 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
 </head>
 <body>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script>
+        $(function(){
+            $('a').each(function(){
+                if ($(this).prop('href') == window.location.href) {
+                    $(this).addClass('active');
+                    $(this).parents('li').addClass('active');
+                }
+            });
+        });
+    </script>
 
     <nav>
         <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/staffavs">Staff Favorites</a></li>
-            <li id="login"><a href="/login">Login</a></li>
+            <li id="login"><a href="/login">Login/SignUp</a></li>
         </ul>
     </nav>
 

@@ -65,33 +65,10 @@ def usersdata():
 
     if request.method=='POST':
         if request.form['recType']=='Healthy Recipe':
-            name = request.form['recname']
-            ingredients = request.form['ingredients']
-            preperation = request.form['preperation']
-            cooking = request.form['cooking']
-
-            # Create hlthyrec object
-            hlthyrec = HlthyRec(name=name, ingredients=ingredients, preperation=preperation, cooking=cooking)
-
-            # Set owner of this recipe
-            hlthyrec.userId = current_user.id
-            db.session.add(hlthyrec)
-            db.session.commit()
+            recTypeCreate(HlthyRec)
 
         if request.form['recType']=='That Dank Dank':
-            name = request.form['recname']
-            ingredients = request.form['ingredients']
-            preperation = request.form['preperation']
-            cooking = request.form['cooking']
-
-            # Create dankrec object
-            dankrec = DankRec(name=name, ingredients=ingredients, preperation=preperation,
-                              cooking=cooking)
-
-            # Set owner of this recipe
-            dankrec.userId = current_user.id
-            db.session.add(dankrec)
-            db.session.commit()
+            recTypeCreate(DankRec)
 
 
     return render_template('profile.html', hlthyRecs=hlthyRecs, dankRecs=dankRecs,
@@ -103,7 +80,6 @@ def logout():
     logout_user()
     return redirect('/login')
 
-
 @app.route('/edithlthy/<recId>', methods=['POST', 'GET'])
 def edithlthy(recId):
     if request.method == 'POST':
@@ -112,40 +88,14 @@ def edithlthy(recId):
 
         if recType == "Healthy Recipe":
 
-            rec = HlthyRec.query.get(recId)
-
-            name = request.form['recname']
-            ingredients = request.form['ingredients']
-            preperation = request.form['preperation']
-            cooking = request.form['cooking']
-
-            rec.name = name
-            rec.ingredients = ingredients
-            rec.preperation = preperation
-            rec.cooking = cooking
-
-            db.session.commit()
-
-            return redirect('/profile')
+            recEdit(HlthyRec, recId)
 
         if recType == "That Dank Dank":
             hlthyrec = HlthyRec.query.get(recId)
             db.session.delete(hlthyrec)
             db.session.commit()
 
-            name = request.form['recname']
-            ingredients = request.form['ingredients']
-            preperation = request.form['preperation']
-            cooking = request.form['cooking']
-
-            # Create dankrec object
-            dankrec = DankRec(name=name, ingredients=ingredients, preperation=preperation,
-                              cooking=cooking)
-
-            # Set owner of this recipe
-            dankrec.userId = current_user.id
-            db.session.add(dankrec)
-            db.session.commit()
+            recTypeCreate(DankRec)
 
             return redirect('/profile')
 
@@ -168,40 +118,14 @@ def editdank(recId):
         recType = request.form['recType']
 
         if recType == "That Dank Dank":
-            # rec = DankRec.query.get(recId)
-            #
-            # name = request.form['recname']
-            # ingredients = request.form['ingredients']
-            # preperation = request.form['preperation']
-            # cooking = request.form['cooking']
-            #
-            # rec.name = name
-            # rec.ingredients = ingredients
-            # rec.preperation = preperation
-            # rec.cooking = cooking
-            #
-            # db.session.commit()
-
-            return recTypeNormal(DankRec, recId)
+            recEdit(DankRec)
 
         if recType == "Healthy Recipe":
             dankrec = DankRec.query.get(recId)
             db.session.delete(dankrec)
             db.session.commit()
 
-            name = request.form['recname']
-            ingredients = request.form['ingredients']
-            preperation = request.form['preperation']
-            cooking = request.form['cooking']
-
-            # Create HlthyRec object
-            hlthyRec = HlthyRec(name=name, ingredients=ingredients, preperation=preperation,
-                              cooking=cooking)
-
-            # Set owner of this recipe
-            hlthyRec.userId = current_user.id
-            db.session.add(hlthyRec)
-            db.session.commit()
+            recTypeCreate(HlthyRec)
 
             return redirect('/profile')
     else:
@@ -214,8 +138,22 @@ def editdank(recId):
         return render_template('editdank.html', name=name, ingredients=ingredients,
                                preperation=preperation, cooking=cooking, recId=recId)
 
-def recTypeNormal(model, recId):
-    rec = model.Query.get(recId)
+def recTypeCreate(model):
+    name = request.form['recname']
+    ingredients = request.form['ingredients']
+    preperation = request.form['preperation']
+    cooking = request.form['cooking']
+
+    # Create object
+    rectype = model(name=name, ingredients=ingredients, preperation=preperation, cooking=cooking)
+
+    # Set owner of this recipe
+    rectype.userId = current_user.id
+    db.session.add(rectype)
+    db.session.commit()
+
+def recEdit(model, recId):
+    rec = model.query.get(recId)
 
     name = request.form['recname']
     ingredients = request.form['ingredients']
@@ -230,9 +168,6 @@ def recTypeNormal(model, recId):
     db.session.commit()
 
     return redirect('/profile')
-
-
-
 
 @app.route('/hlthydelete/<recId>', methods=['GET'])
 def hlthydelete(recId):

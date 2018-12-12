@@ -18,17 +18,23 @@
         {% if sorry %}
             <p style="color: red;">Sorry please try again</p>
         {% endif %}
-        <form action="/login" method="POST">
-              Username:<input type="text" name="username"><br>
-                Password:<input type="password" name="password"><br>
+        <div class="log">
+            <form action="/login" method="POST">
+                <label for="username">Username:</label><br>
+                <input type="text" id="username" name="username"><br>
+                <label for="password">Password:</label><br>
+                <input type="password" id="password" name="password"><br>
                 <input type="submit" value="Login">
-        </form>
-
+            </form>
+        </div>
         <h1>Sign up here!</h1>
         <form action="/signup" method="POST">
-            Username:<input type="text" name="usernameS"><br>
-            Password:<input type="password" name="passwordS"><br>
-            Name:<input type="text" name="nameS"><br>
+            <label for="usernameS">Username:</label><br>
+            <input type="text"  id="usernameS" name="usernameS"><br>
+            <label for="passwordS">Password:</label><br>
+            <input type="password" id="passwordS" name="passwordS"><br>
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="nameS"><br>
             <input type="submit" value="Sign Up!">
 
         </form>

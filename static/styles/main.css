@@ -67,3 +67,18 @@ li.cooking {
     background-color: cornflowerblue;
 }
 
+div.log {
+    width: 30%;
+}
+
+.logleft {
+    width: 50%;
+    float: left;
+    clear: left;
+}
+
+.logright {
+    width: 50%;
+    float: right;
+}
+

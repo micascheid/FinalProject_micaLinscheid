@@ -12,8 +12,16 @@
     <!--Title-->
     {% block title %}Home{% endblock %}
 
+
+
     <!--Unique Content-->
     {% block content %}
+    {% if userExist %}
+    <script>
+        login = document.getElementById("login");
+        login.innerHTML = '<li id=' + 'login' + '><a href="/logout">Logout</a></li>';
+    </script>
+    {% endif %}
     <div class="main">
         <h1>Welcome to  Recipe Cloud</h1>
         <div id="left">

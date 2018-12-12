@@ -28,6 +28,9 @@
             </form>
         </div>
         <h1>Sign up here!</h1>
+        {% if sorry2 %}
+            <p style="color: red;">Sorry choose a different user name</p>
+        {% endif %}
         <form action="/signup" method="POST">
             <label for="usernameS">Username:</label><br>
             <input type="text"  id="usernameS" name="usernameS"><br>

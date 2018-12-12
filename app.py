@@ -19,8 +19,18 @@ login_manager.init_app(app)
 def home():
     hlthyRecs = HlthyRec.query.filter_by(userId=1)
     dankRecs = DankRec.query.filter_by(userId=1)
+    userExist = False
+
+    try:
+        current_user.id
+        userExist = True
+    except:
+        print("oughta do something")
+
+    print("USER:", userExist)
+
     return render_template('home.html', hlthyRecs=hlthyRecs, dankRecs=dankRecs,
-                           username="Staff")
+                           username="Staff", userExist=userExist)
 
 @app.route('/login', methods=['POST','GET'])
 def login():
@@ -31,7 +41,7 @@ def login():
         if user == None:
             sorry = True
             return render_template('login.html', sorry=sorry)
-        elif user.username == username  and user.password == password:
+        elif user.username == username and user.password == password:
             login_user(user)
             return redirect('/profile')
     return render_template('login.html')
@@ -39,9 +49,15 @@ def login():
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
     if request.method=='POST':
+        sorry2 = False
         username = request.form['usernameS']
         password = request.form['passwordS']
         name = request.form['nameS']
+
+        alreadyUser = User.query.filter_by(username=username).first()
+        if alreadyUser != None:
+            sorry2 = True
+            return render_template('login.html', sorry2=sorry2)
 
         # User object
         user = User(username=username, password=password, name=name)
@@ -118,6 +134,10 @@ def dankdelete(recId):
 @app.errorhandler(404)
 def err(err):
     return render_template('404.html', err=err)
+
+@app.errorhandler(401)
+def err(err):
+    return redirect('/login')
 
 
 # functions

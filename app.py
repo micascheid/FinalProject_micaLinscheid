@@ -25,9 +25,7 @@ def home():
         current_user.id
         userExist = True
     except:
-        print("oughta do something")
-
-    print("USER:", userExist)
+        print("No Current User")
 
     return render_template('home.html', hlthyRecs=hlthyRecs, dankRecs=dankRecs,
                            username="Staff", userExist=userExist)

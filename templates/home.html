@@ -29,7 +29,7 @@
             <h2>Healthy Recipes</h2>
             {% if hlthyRecs %}
                 {% for item in hlthyRecs %}
-                    <h3>{{item.name}} <a href="/edithlthy/{{item.id}}">Edit</a> <a href="/hlthydelete/{{item.id}}">Delete</a> </h3>
+                    <h3>{{item.name}}</h3>
                     <ul>
                         <li class="ingredients">Ingredients: {{item.ingredients}}</li>
                         <li class="preperation">Preperation: {{item.preperation}}</li>
@@ -41,7 +41,7 @@
             <h2>Dank Recipes</h2>
             {% if dankRecs %}
                 {% for item in dankRecs %}
-                    <h3>{{item.name}} <a href="/editdank/{{item.id}}">Edit</a> <a href="/dankdelete/{{item.id}}">Delete</a> </h3>
+                    <h3>{{item.name}}</h3>
                     <ul>
                         <li class="ingredients">Ingredients: {{item.ingredients}}</li>
                         <li class="preperation">Preperation: {{item.preperation}}</li>

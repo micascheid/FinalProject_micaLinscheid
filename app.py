@@ -17,8 +17,10 @@ login_manager.init_app(app)
 # Routes
 @app.route('/')
 def home():
-    hlthyRecs = HlthyRec.query.filter_by(userId=1)
-    dankRecs = DankRec.query.filter_by(userId=1)
+    staff = User.query.filter_by(username="staff").first()
+    staffId = staff.id
+    hlthyRecs = HlthyRec.query.filter_by(userId=staffId)
+    dankRecs = DankRec.query.filter_by(userId=staffId)
     userExist = False
 
     try:
@@ -36,7 +38,8 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        if user == None:
+
+        if user == None or user.password != password:
             sorry = True
             return render_template('login.html', sorry=sorry)
         elif user.username == username and user.password == password:
